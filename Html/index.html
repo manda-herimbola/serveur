@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport"
+              content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Andrana</title>
+    </head>
+    <body>
+
+        <form method="post" onsubmit="postValue(event)">
+            <input type="text" name="username">
+            <input type="password" name="password">
+            <input type="submit" value="send">
+        </form>
+
+        <script>
+
+            const postValue = async (ev) => {
+                ev.preventDefault()
+
+                const form = ev.target
+                const formData = new FormData(form)
+                const data = Object.fromEntries(formData.entries())
+
+                const res = await fetch( 'http://localhost:5000/users/login', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(data)
+                })
+
+                const token = await res.json()
+
+                const verifyToken = await fetch('http://localhost:5000/users/post', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(token)
+                })
+                
+                console.log(await verifyToken.json())
+
+                form.reset()
+            }
+
+        </script>
+
+    </body>
+</html>
