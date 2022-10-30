@@ -23,7 +23,6 @@ const routeGuard = (req, res, next) => {
         next()
     }
 }
-
 const getAllUsers = async ( req, res ) => {
 
     jwt.verify( req.token , secretKey, (err, authData) => {
@@ -40,8 +39,8 @@ const getAllUsers = async ( req, res ) => {
 }
 
 users.get( '/', routeGuard, getAllUsers)
-
-users.post( '/login' , async ( req, res ) => {
+users.post( '/login' ,
+    async ( req, res ) => {
 
     const { email, password } = req.body
     const usersFilter = await dataBase.findOne({ email, password })
@@ -54,8 +53,8 @@ users.post( '/login' , async ( req, res ) => {
     }else res.status(403).json({err: "pass or username wrong"})
 
 })
-
-users.post( '/create', async ( req, res ) => {
+users.post( '/create',
+    async ( req, res ) => {
     const { email, username, password } = req.body
     const newDataBase = new dataBase({ email, username, password })
 
