@@ -1,6 +1,6 @@
 const express = require('express')
 const {Request} = require('express')
-const dataBase = require("../models/data");
+const dataBase = require("../models/dataUsers");
 const users = express.Router()
 const jwt = require('jsonwebtoken')
 const {use} = require("express/lib/router");
@@ -14,7 +14,6 @@ const secretKey = 'secretKey';
  */
 
 const routeGuard = (req, res, next) => {
-
     const bearerHeader = req.headers['authorization']
 
     if(typeof bearerHeader !== 'undefined') {
@@ -23,8 +22,8 @@ const routeGuard = (req, res, next) => {
         next()
     }
 }
-const getAllUsers = async ( req, res ) => {
 
+const getAllUsers = async ( req, res ) => {
     jwt.verify( req.token , secretKey, (err, authData) => {
         if (err) res.status(403).json({ err })
         else {
@@ -35,13 +34,11 @@ const getAllUsers = async ( req, res ) => {
             })
         }
     })
-
 }
 
 users.get( '/', routeGuard, getAllUsers)
-users.post( '/login' ,
-    async ( req, res ) => {
 
+users.post( '/login' , async ( req, res ) => {
     const { email, password } = req.body
     const usersFilter = await dataBase.findOne({ email, password })
 
@@ -51,10 +48,9 @@ users.post( '/login' ,
             else res.json({ token })
         })
     }else res.status(403).json({err: "pass or username wrong"})
-
 })
-users.post( '/create',
-    async ( req, res ) => {
+
+users.post( '/create', async ( req, res ) => {
     const { email, username, password } = req.body
     const newDataBase = new dataBase({ email, username, password })
 

@@ -1,7 +1,8 @@
 const express = require('express')
 const app = express()
 const mongoose = require('mongoose')
-const routes = require('./routes/users')
+const users = require('./routes/users')
+const tasks = require('./routes/tasks')
 const bodyParser = require("body-parser")
 const cors = require('./cors/cors')
 
@@ -14,6 +15,8 @@ db.once('open', () => console.log('Connected to dataBase'))
 app.use(cors)
 app.use(bodyParser.json())
 app.use(express.json())
-app.use( '/users' , routes )
+
+app.use( '/users' , users )
+app.use( '/tasks' , tasks )
 
 app.listen( 5000 , () => console.log('server run'))
