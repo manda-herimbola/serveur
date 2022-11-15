@@ -32,4 +32,19 @@ tasks.post('/', async (req, res) => {
 
 })
 
+tasks.put('/:id',async (req,res) => {
+    const id = req.params.id
+    const newData = req.body
+
+    try {
+        const data = await dataBase.updateOne({ _id : id }, {
+            $set: newData
+        })
+        res.status(201).json( { message: 'data setting', data } )
+    }catch (err){
+        res.status(400).json({ message: err.message })
+    }
+
+})
+
 module.exports = tasks
